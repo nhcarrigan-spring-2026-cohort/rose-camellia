@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Comments {
+  id             String   @id
+  postId         String
+  authorUsername String
+  content        String
+  createdAt      DateTime @default(now())
+  User           User     @relation(fields: [authorUsername], references: [username])
+  Post           Post     @relation(fields: [postId], references: [id])
+}
+
+model ImageUrls {
+  id     String @id
+  postId String
+  url    String
+  Post   Post   @relation(fields: [postId], references: [id])
+}
+
+model Post {
+  id             String      @id
+  createdAt      DateTime    @default(now())
+  postType       PostType
+  authorUsername String
+  title          String
+  content        String
+  location       String
+  lostfoundDate  DateTime
+  found          Boolean
+  reward         Float?
+  Comments       Comments[]
+  ImageUrls      ImageUrls[]
+  User           User        @relation(fields: [authorUsername], references: [username])
+}
+
+model User {
+  username       String        @id @unique
+  name           String
+  contactNumber  String?
+  email          String        @unique
+  hashedPassword String
+  createdAt      DateTime      @default(now())
+  verified       AccountStatus @default(unverified)
+  Comments       Comments[]
+  Post           Post[]
+}
+
+enum AccountStatus {
+  verified
+  unverified
+}
+
+enum PostType {
+  found
+  lost
+}

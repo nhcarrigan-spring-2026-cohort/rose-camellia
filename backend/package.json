@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.ts",
+  "type":"module",
   "scripts": {
     "dev": "nodemon --watch tsx src/index.ts"
   },
@@ -11,11 +12,16 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.6",
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.3",
+    "dotenv": "^17.2.4",
+    "prisma": "^7.4.0",
+    "typescript": "^5.9.3"
   }
 }
