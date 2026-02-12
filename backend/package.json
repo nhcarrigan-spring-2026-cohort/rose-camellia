@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "dev": "nodemon --watch tsx src/index.ts"
   },
@@ -10,12 +11,26 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@supabase/supabase-js": "^2.95.3",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.11",
+    "pg": "^8.18.0",
+    "supabase": "^2.76.8",
+    "supabase-js": "^0.0.1-security",
+    "ts-node": "^10.9.2",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^25.2.3",
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^17.2.4",
+    "prisma": "^5.22.0",
+    "typescript": "^5.9.3"
   }
 }
