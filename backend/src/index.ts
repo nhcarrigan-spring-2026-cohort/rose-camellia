@@ -29,7 +29,37 @@ app.get("/", (_req, res) => {
 app.get("/health", async (_req, res) => {
   try {
     await prisma.$connect();
-    res.json({ status: "ok", database: "connected" });
+    //retrieves all entires in user table
+    let users = await prisma.user.findMany()
+    console.log(users)
+    
+    //removes previously created test user
+    await prisma.user.delete({where:{
+      username: "willis"
+    }})
+
+    //creates new user
+    await prisma.user.create({data:{name:"Adam",email:"willis@test.com", hashedPassword:"abcde", username:"willis", }})
+    
+    //retrieves and logs updated user table
+    users = await prisma.user.findMany()
+    console.log(users)
+
+    //updates a user
+    await prisma.user.update({
+      where:{
+        username:"willis"
+      },
+      data:{
+        email:"willis@test2.com"
+      }
+
+    })
+
+    //update users to return
+    users = await prisma.user.findMany()
+
+    res.json({ status: "ok", database: "connected" , data:users});
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -38,6 +68,9 @@ app.get("/health", async (_req, res) => {
     });
   }
 });
+
+
+
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
