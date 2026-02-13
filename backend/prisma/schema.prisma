@@ -8,49 +8,82 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Comments {
-  id             String   @id
-  postId         String
-  authorUsername String
-  content        String
-  createdAt      DateTime @default(now())
-  User           User     @relation(fields: [authorUsername], references: [username])
-  Post           Post     @relation(fields: [postId], references: [id])
-}
-
-model ImageUrls {
-  id     String @id
-  postId String
-  url    String
-  Post   Post   @relation(fields: [postId], references: [id])
-}
-
-model Post {
-  id             String      @id
-  createdAt      DateTime    @default(now())
-  postType       PostType
-  authorUsername String
-  title          String
-  content        String
-  location       String
-  lostfoundDate  DateTime
-  found          Boolean
-  reward         Float?
-  Comments       Comments[]
-  ImageUrls      ImageUrls[]
-  User           User        @relation(fields: [authorUsername], references: [username])
-}
-
 model User {
-  username       String        @id @unique
+  username       String        @id @unique // Username is unique
   name           String
   contactNumber  String?
   email          String        @unique
-  hashedPassword String
+  hashedPassword String?       // Made nullable for guests
   createdAt      DateTime      @default(now())
   verified       AccountStatus @default(unverified)
+  isGuest        Boolean       @default(false) // NEW
   Comments       Comments[]
   Post           Post[]
+}
+
+model Post {
+  id             String      @id @default(uuid()) // Changed to UUID
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt // NEW
+  postType       PostType
+  authorUsername String
+  
+  // Pet Information (NEW)
+  petName        String?
+  title          String
+  description    String      @db.Text // Renamed from content
+  petType        String?
+  breed          String?
+  color          String?
+  size           String?
+  
+  // Location
+  location       String
+  latitude       Float?      // NEW
+  longitude      Float?      // NEW
+  lostFoundDate  DateTime
+  
+  // Status (renamed from 'found')
+  resolved       Boolean     @default(false)
+  resolvedAt     DateTime?   // NEW
+  
+  // Contact override (NEW)
+  contactEmail   String?
+  contactPhone   String?
+  
+  reward         Float?
+  
+  Comments       Comments[]
+  ImageUrls      ImageUrls[]
+  User           User        @relation(fields: [authorUsername], references: [username])
+  
+  @@index([postType])
+  @@index([resolved])
+  @@index([lostFoundDate])
+}
+
+model ImageUrls {
+  id        String   @id @default(uuid())
+  postId    String
+  url       String
+  isPrimary Boolean  @default(false) // NEW
+  createdAt DateTime @default(now()) // NEW
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@index([postId])
+}
+
+model Comments {
+  id             String   @id @default(uuid())
+  postId         String
+  authorUsername String
+  content        String   @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt // NEW
+  User           User     @relation(fields: [authorUsername], references: [username])
+  Post           Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@index([postId])
 }
 
 enum AccountStatus {
@@ -59,6 +92,7 @@ enum AccountStatus {
 }
 
 enum PostType {
-  found
   lost
+  found
+  sighting // NEW
 }
