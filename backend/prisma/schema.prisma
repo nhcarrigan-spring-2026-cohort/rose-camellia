@@ -26,7 +26,7 @@ model Post {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt // NEW
   postType       PostType
-  authorUsername String
+  authorUsername String?
   
   // Pet Information (NEW)
   petName        String?
@@ -52,14 +52,18 @@ model Post {
   contactPhone   String?
   
   reward         Float?
+
+  //NEW: Verification Code (for lost pets only)
+  verificationCode String? @unique // 6-digit code like "ABC123"
   
   Comments       Comments[]
   ImageUrls      ImageUrls[]
-  User           User        @relation(fields: [authorUsername], references: [username])
+  User           User?        @relation(fields: [authorUsername], references: [username])
   
   @@index([postType])
   @@index([resolved])
   @@index([lostFoundDate])
+  @@index([verificationCode])
 }
 
 model ImageUrls {
