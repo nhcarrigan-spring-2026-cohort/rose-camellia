@@ -1,4 +1,4 @@
-# Lost Pet Reunion Board - *Brining furry friends home*
+# Lost Pet Reunion Board - *Bringing furry friends home*
 
 > A fast, compassionate platform for reuniting lost pets with their families. People post *Lost* alerts with photos & last-seen loction; others post *Sightings* or *Found notices*. Smart location + time matching surfaces likely reunions so panicked owners and helpful finders connect quickly.
 
