@@ -4,7 +4,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch tsx src/index.ts"
+    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "@types/uuid": "^10.0.0",
     "dotenv": "^17.2.4",
     "prisma": "^5.22.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
