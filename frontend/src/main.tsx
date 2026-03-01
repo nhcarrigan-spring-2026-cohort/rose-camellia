@@ -10,8 +10,9 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
-        if ((error as { response?: { status?: number } })?.response?.status !== undefined) {
-          const status = (error as { response: { status: number } }).response.status
+        const axiosError = error as { response?: { status?: number } } | null
+        if (axiosError?.response?.status !== undefined) {
+          const status = axiosError.response.status as number
           if (status >= 400 && status < 500) return false
         }
         return failureCount < 3

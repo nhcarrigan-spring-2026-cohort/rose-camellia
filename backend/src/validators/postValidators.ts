@@ -55,7 +55,7 @@ export const createPostSchema = z.object({
         .transform(Number),
     ),
 
-  lostFoundDate: z.string().datetime("Invalid date format").or(z.date()),
+  lostFoundDate: z.string().datetime("Invalid date format").or(z.string().date("Invalid date format")).or(z.date()),
 
   contactEmail: z
     .string()

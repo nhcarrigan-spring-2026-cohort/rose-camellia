@@ -427,19 +427,21 @@ export const updatePost = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Don't allow updating verification code
-    delete updateData.verificationCode;
+    // Whitelist of Prisma-writable post fields — everything else is ignored.
+    // This prevents computed/relational fields like `comments`, `hasVerification`,
+    // `resolved`, `updatedAt`, etc. from reaching Prisma and causing errors.
+    const UPDATABLE_FIELDS = [
+      "postType", "title", "description", "petName", "petType", "breed",
+      "color", "size", "location", "latitude", "longitude", "lostFoundDate",
+      "contactEmail", "contactPhone", "reward", "authorUsername",
+    ] as const;
 
     const cleanData: any = {};
-    Object.keys(updateData).forEach((key) => {
-      if (
-        updateData[key] !== undefined &&
-        key !== "id" &&
-        key !== "createdAt"
-      ) {
+    for (const key of UPDATABLE_FIELDS) {
+      if (updateData[key] !== undefined) {
         cleanData[key] = updateData[key];
       }
-    });
+    }
 
     if (cleanData.lostFoundDate) {
       cleanData.lostFoundDate = new Date(cleanData.lostFoundDate);
